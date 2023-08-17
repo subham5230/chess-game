@@ -1,4 +1,3 @@
-import React from "react";
 import { PIECE } from "../types";
 import {
     FaChessKing,
