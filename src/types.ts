@@ -7,3 +7,8 @@ export enum PIECE {
     QUEEN = 'QUEEN',
     KING = 'KING'
 }
+
+export enum PLAYER {
+    PLAYER1 = 1,
+    PLAYER2 = 2
+}

@@ -1,3 +1,5 @@
+import { possibleMoves } from "../game";
+import { useGame, useGameDispatch } from "../Contexts/GameContext";
 import { PIECE } from "../types";
 import {
     FaChessKing,
@@ -10,8 +12,8 @@ import {
 
 type Props = {
   color: string;
-  onClick?: () => void;
   payload: PIECE;
+  pos: number;
   player: number | null;
 };
 
@@ -35,13 +37,70 @@ const getPieceIcon = (piece: PIECE, player: number) => {
 };
 
 const Square = (props: Props) => {
+  const dispatch = useGameDispatch();
+  const game = useGame();
+
+
   return (
-    <button className={`border border-slate-700 flex items-center justify-center ${props.color}`}>
+    <button onClick={handleClick} className={`border border-slate-700 flex items-center justify-center ${game?.highlightedSquares?.includes(props.pos) ? ' bg-green-200' : props.color}`}>
       {props.payload !== PIECE.EMPTY && props.player && (
         <div className="text-3xl">{getPieceIcon(props.payload, props.player)}</div>
         )}  
     </button>
   );
+
+  function handleClick(){
+
+    if(!game || !dispatch) return;
+    if(!game.highlightedSquares.includes(props.pos) && props.payload == PIECE.EMPTY){   
+      dispatch({...game, highlightedSquares: [], selectedSquare: null});
+      return;
+    }
+
+    if(game.highlightedSquares.includes(props.pos) && game.selectedSquare){
+      handleMakeMove(game.selectedSquare, props.pos);
+      return;
+    }
+
+    getPossibleMoves();
+
+  }
+
+  function handleMakeMove(from: number, to: number){
+    if(!game || !dispatch) return;
+
+    const squares = [...game.squares];
+
+    if (!squares[from] || !squares[to]) return;
+    
+    if(squares[to].payload !== PIECE.EMPTY){
+      dispatch({...game, highlightedSquares: [], selectedSquare: null});
+      return;
+    }
+
+    squares[to] = {...squares[to], payload: squares[from].payload, player: squares[from].player};
+    squares[from] = {...squares[from], payload: PIECE.EMPTY, player: null};
+
+    dispatch({...game, squares, highlightedSquares: [], selectedSquare: null, currentPlayer: game.currentPlayer === 1 ? 2 : 1});
+  }
+
+  function getPossibleMoves(){
+    if(!game || !dispatch) return;
+
+    const positions = possibleMoves(props.pos, props.payload);
+
+    highlightSquares(positions);
+  }
+
+  function highlightSquares(positions: number[]) {
+    if(!game || !dispatch) return;
+
+    dispatch({...game, highlightedSquares: positions, selectedSquare: props.pos});
+  }
 };
 
 export default Square;
+
+
+
+
