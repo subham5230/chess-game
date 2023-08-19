@@ -1,6 +1,4 @@
-import React from "react";
 import Square from "./Square";
-// import { PIECE } from "../types";
 import { useGame } from "../Contexts/GameContext";
 
 function Board() {

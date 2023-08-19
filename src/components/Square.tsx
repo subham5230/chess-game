@@ -20,17 +20,17 @@ type Props = {
 const getPieceIcon = (piece: PIECE, player: number) => {
     switch (piece) {
         case PIECE.PAWN:
-        return player === 1 ? <FaChessPawn className='text-black' /> : <FaChessPawn className='text-white' />;
+        return player === 2 ? <FaChessPawn className='text-black' /> : <FaChessPawn className='text-white' />;
         case PIECE.ROOK:
-        return player === 1 ? <FaChessRook className='text-black' /> : <FaChessRook className='text-white' />;
+        return player === 2 ? <FaChessRook className='text-black' /> : <FaChessRook className='text-white' />;
         case PIECE.KNIGHT:
-        return player === 1 ? <FaChessKnight className='text-black' /> : <FaChessKnight className='text-white' />;
+        return player === 2 ? <FaChessKnight className='text-black' /> : <FaChessKnight className='text-white' />;
         case PIECE.BISHOP:
-        return player === 1 ? <FaChessBishop className='text-black' /> : <FaChessBishop className='text-white' />;
+        return player === 2 ? <FaChessBishop className='text-black' /> : <FaChessBishop className='text-white' />;
         case PIECE.QUEEN:
-        return player === 1 ? <FaChessKing className='text-black' /> : <FaChessKing className='text-white' />;
+        return player === 2 ? <FaChessQueen className='text-black' /> : <FaChessQueen className='text-white' />;
         case PIECE.KING:
-        return player === 1 ? <FaChessQueen className='text-black' /> : <FaChessQueen className='text-white' />;
+        return player === 2 ? <FaChessKing className='text-black' /> : <FaChessKing className='text-white' />;
         default:
         return "";
     }
@@ -39,7 +39,6 @@ const getPieceIcon = (piece: PIECE, player: number) => {
 const Square = (props: Props) => {
   const dispatch = useGameDispatch();
   const game = useGame();
-
 
   return (
     <button onClick={handleClick} className={`border border-slate-700 flex items-center justify-center ${game?.highlightedSquares?.includes(props.pos) ? ' bg-green-200' : props.color}`}>
@@ -81,13 +80,22 @@ const Square = (props: Props) => {
     squares[to] = {...squares[to], payload: squares[from].payload, player: squares[from].player};
     squares[from] = {...squares[from], payload: PIECE.EMPTY, player: null};
 
+    if(game.currentPlayer === 1 && game.player1firstMove === false){
+      dispatch({...game, squares, highlightedSquares: [], selectedSquare: null, currentPlayer: 2, player1firstMove: true});
+      return;
+    }
+    if(game.currentPlayer === 2 && game.player2firstMove === false){
+      dispatch({...game, squares, highlightedSquares: [], selectedSquare: null, currentPlayer: 1, player2firstMove: true});
+      return;
+    }
+
     dispatch({...game, squares, highlightedSquares: [], selectedSquare: null, currentPlayer: game.currentPlayer === 1 ? 2 : 1});
   }
 
   function getPossibleMoves(){
     if(!game || !dispatch) return;
 
-    const positions = possibleMoves(props.pos, props.payload);
+    const positions = possibleMoves(props.pos, props.payload, game);
 
     highlightSquares(positions);
   }

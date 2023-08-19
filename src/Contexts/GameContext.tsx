@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   Dispatch,
   createContext,
@@ -6,26 +7,13 @@ import {
   ReactNode,
 } from "react";
 
-import { PIECE, PLAYER } from "../types";
+import { PIECE, Game, Square } from "../types";
 
-type Game = {
-    currentPlayer: PLAYER;
-    selectedSquare: number | null;
-    highlightedSquares: number[];
-    squares: Square[];
-}
+
 
 interface GameProviderProps {
   children: ReactNode;
 }
-
-type Square = {
-  color: string;
-  payload: PIECE;
-  pos: number;
-  player: number | null;
-  highlighted?: boolean;
-};
 
 type GameAction = Game;
 
@@ -59,6 +47,8 @@ function gameReducer(game: Game, action: GameAction) {
 
 const intialGame = {
     currentPlayer: 1,
+    player1firstMove: false,
+    player2firstMove: false,
     selectedSquare: null,
     highlightedSquares: [],
     squares: renderGame(),
@@ -74,40 +64,40 @@ function renderGame(): Square[] {
 
     if (i >= 8 && i < 16) {
       payload = PIECE.PAWN;
-      player = 1;
+      player = 2;
     } else if (i >= 48 && i < 56) {
       payload = PIECE.PAWN;
-      player = 2;
+      player = 1;
     } else if (i === 0 || i === 7) {
       payload = PIECE.ROOK;
-      player = 1;
+      player = 2;
     } else if (i === 56 || i === 63) {
       payload = PIECE.ROOK;
-      player = 2;
+      player = 1;
     } else if (i === 1 || i === 6) {
       payload = PIECE.KNIGHT;
-      player = 1;
+      player = 2;
     } else if (i === 57 || i === 62) {
       payload = PIECE.KNIGHT;
-      player = 2;
+      player = 1;
     } else if (i === 2 || i === 5) {
       payload = PIECE.BISHOP;
-      player = 1;
+      player = 2;
     } else if (i === 58 || i === 61) {
       payload = PIECE.BISHOP;
-      player = 2;
+      player = 1;
     } else if (i === 3) {
       payload = PIECE.QUEEN;
-      player = 1;
+      player = 2;
     } else if (i === 59) {
       payload = PIECE.QUEEN;
-      player = 2;
+      player = 1;
     } else if (i === 4) {
       payload = PIECE.KING;
-      player = 1;
+      player = 2;
     } else if (i === 60) {
       payload = PIECE.KING;
-      player = 2;
+      player = 1;
     }
 
     if (i % 2 === 0 && Math.floor(i / 8) % 2 === 0) color = "bg-slate-600";
