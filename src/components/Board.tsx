@@ -6,7 +6,6 @@ function Board() {
 
   return (
     <>
-    <h2 className="text-white">PLAYER: {game && game?.currentPlayer}</h2>
     <div className="grid grid-cols-8 grid-rows-8 auto-rows-fr auto-cols-fr gap-0 w-[600px] h-[600px] mx-auto relative">
       {game?.squares?.map((square, index) => (
         <Square
