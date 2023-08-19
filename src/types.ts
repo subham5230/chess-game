@@ -24,6 +24,8 @@ export type Square = {
 export type Game = {
     currentPlayer: PLAYER;
     selectedSquare: number | null;
+    player1FallenPieces: PIECE[];
+    player2FallenPieces: PIECE[];
     player1firstMove: boolean;
     player2firstMove: boolean;
     highlightedSquares: number[];

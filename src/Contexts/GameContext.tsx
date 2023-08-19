@@ -9,8 +9,6 @@ import {
 
 import { PIECE, Game, Square } from "../types";
 
-
-
 interface GameProviderProps {
   children: ReactNode;
 }
@@ -46,13 +44,15 @@ function gameReducer(game: Game, action: GameAction) {
 }
 
 const intialGame = {
-    currentPlayer: 1,
-    player1firstMove: false,
-    player2firstMove: false,
-    selectedSquare: null,
-    highlightedSquares: [],
-    squares: renderGame(),
-}
+  currentPlayer: 1,
+  player1firstMove: false,
+  player2firstMove: false,
+  player1FallenPieces: [],
+  player2FallenPieces: [],
+  selectedSquare: null,
+  highlightedSquares: [],
+  squares: renderGame(),
+};
 
 function renderGame(): Square[] {
   const squares = Array(64).fill(null);
