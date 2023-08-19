@@ -39,7 +39,7 @@ export function useGameDispatch() {
   return useContext(GameDispatchContext);
 }
 
-function gameReducer(game: Game, action: GameAction) {
+function gameReducer(_game: Game, action: GameAction) {
   return action;
 }
 
